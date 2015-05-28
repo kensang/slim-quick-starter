@@ -1,0 +1,25 @@
+# Set spammers referral as spam
+SetEnvIfNoCase Referer somespammerdomain1.com spammer=yes
+SetEnvIfNoCase Referer somespammerdomain2.com spammer=yes
+SetEnvIfNoCase Referer somespammerdomain3.com spammer=yes
+SetEnvIfNoCase Referer somespammerdomain4.com spammer=yes
+SetEnvIfNoCase Referer somespammerdomain5.com spammer=yes
+
+order allow,deny
+allow from all
+# Deny all spammers
+Deny from env=spammer
+
+
+
+
+RewriteEngine On
+
+# Some hosts may require you to use the `RewriteBase` directive.
+# If you need to use the `RewriteBase` directive, it should be the
+# absolute physical path to the directory that contains this htaccess file.
+#
+# RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [QSA,L]
