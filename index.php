@@ -39,6 +39,16 @@ ORM::configure('driver_options', array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAME
 ORM::configure('logging', DB_LOG);
 
 
+/** 
+ * Setup Twig (Template Engine)
+ */
+Twig_Autoloader::register();
+$loader = new Twig_Loader_Filesystem('./templates');
+$twig = new Twig_Environment($loader, array(
+    'cache' => false,
+    'debug' => DEBUG_MODE,
+));
+
 
 
 
