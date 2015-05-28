@@ -2,7 +2,11 @@
 
 /** 
  * require the file "config.php"; rename the file "config-sample.php" to "config.php" and fill in appropriate values
+ * require running data/db-with-dummy-data-mysql.sql
  */
+
+
+
 
 // Redirect www.somedomain.com to somedomain.com, comment out the following lines if not applicable
 if(substr($_SERVER['HTTP_HOST'], 0, 4) === 'www.') {
@@ -12,8 +16,8 @@ if(substr($_SERVER['HTTP_HOST'], 0, 4) === 'www.') {
 }
 
 
-
 require 'vendor/autoload.php';
+
 
 require 'config.php';
 
@@ -55,13 +59,60 @@ $twig = new Twig_Environment($loader, array(
 
 $app = new \Slim\Slim();
 
-$app->get('/', function () use ($app) {
- 	echo 'hello world';	
+
+
+$app->get(
+    '/', 
+    function () use ($app, $twig) {
+    
+    //Get Posts
+	$posts = ORM::for_table('post')
+    	->order_by_desc('created_at')
+    	->limit(100)
+    	->offset(0)
+    	->find_many();
+
+    echo $twig->render('front.html', array(
+    	'current_uri' => $app->request->getResourceUri(), 
+    	'base_url' => BASE_URL, 
+        'navigation_bar_items' => Settings::$navigation_bar_items, 
+    	'posts' => $posts));
+
 });
 
-$app->get('/hello/:name', function ($name) {
-    echo "Hello, $name";
+
+
+$app->get(
+    '/post/:id', 
+    function ($id) use ($app, $twig) {
+    
+    //Get Post
+	$post = ORM::for_table('post')
+        ->where('id', $id)
+        ->find_one();
+
+    echo $twig->render('post.html', array(
+    	'current_uri' => $app->request->getResourceUri(), 
+    	'base_url' => BASE_URL, 
+        'navigation_bar_items' => Settings::$navigation_bar_items, 
+    	'post' => $post));
+
+})->conditions(array('id' => '\d+'));;
+
+
+
+$app->get(
+    '/about', 
+    function () use ($app, $twig) {
+    
+    echo $twig->render('about.html', array(
+    	'current_uri' => $app->request->getResourceUri(), 
+    	'base_url' => BASE_URL, 
+        'navigation_bar_items' => Settings::$navigation_bar_items));
+
 });
+
+
 
 
 $app->run();

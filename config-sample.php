@@ -34,6 +34,19 @@ else {
 
 
 
+class Settings {
+
+	public static $navigation_bar_items = array(
+		array('label'=>'Home', 'uri'=>''),
+		array('label'=>'About', 'uri'=>'about'),
+	);
+
+}
+
+
+
+
+
 
 /**
  * Constants that don't need to be changed

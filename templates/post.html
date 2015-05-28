@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+
+{% block title %}My Title{% endblock %}
+{% block description %}This is a demo page{% endblock %}
+{% block head %}{{ parent() }}{% endblock %}
+
+
+{% block content %}
+<div class="container">
+
+<div class="row inner_wrapper">
+
+<div class="col-xs-12 col-sm-8 primary_column">
+
+<div class="row">
+<div class="col-xs-12">
+<h3>{{ post.title }}</h3>
+<div>{{ post.content }}</div>
+</div>
+</div>
+
+</div><!--/.primary_column-->
+
+
+<div class="col-xs-12 col-sm-4 secondary_column">
+<h5 class="sidebar-section-header">Do you like our content?  Follow us!</h5>
+</div><!--/.secondary_column-->
+
+
+
+</div><!--/.inner_wrapper-->
+
+
+</div><!-- /.container -->
+
+
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
