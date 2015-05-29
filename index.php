@@ -16,17 +16,17 @@ if(substr($_SERVER['HTTP_HOST'], 0, 4) === 'www.') {
 }
 
 
+// turn on error displaying
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
+
 require 'vendor/autoload.php';
-
-
 require 'config.php';
 
 
-if(DEBUG_MODE) {
-    error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-}
-else {
+// turn off error displaying is debug mode is off
+if(!DEBUG_MODE) {
     error_reporting(0);
     ini_set("display_errors", 0);
 }
