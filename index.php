@@ -1,7 +1,7 @@
 <?php
 
 /** 
- * require the file "config.php"; rename the file "config-sample.php" to "config.php" and fill in appropriate values
+ * require the file "config.php"; copy the file "config-sample.php" as a new file "config.php", and fill in appropriate values
  * require running data/db-with-dummy-data-mysql.sql
  */
 
