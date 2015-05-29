@@ -61,54 +61,108 @@ $app = new \Slim\Slim();
 
 
 
+// front page, loads the latest posts
 $app->get(
     '/', 
     function () use ($app, $twig) {
     
-    //Get Posts
-	$posts = ORM::for_table('post')
-    	->order_by_desc('created_at')
-    	->limit(100)
-    	->offset(0)
-    	->find_many();
+    // Get posts
+    $posts = ORM::for_table('post')
+        ->order_by_desc('created_at')
+        ->limit(100)
+        ->offset(0)
+        ->find_many();
+
+    // Get categories to show on the sidebar
+    $categories = ORM::for_table('category')
+        ->find_many();
 
     echo $twig->render('front.html', array(
-    	'current_uri' => $app->request->getResourceUri(), 
-    	'base_url' => BASE_URL, 
+        'current_uri' => $app->request->getResourceUri(), 
+        'base_url' => BASE_URL, 
         'navigation_bar_items' => Settings::$navigation_bar_items, 
-    	'posts' => $posts));
+        'categories' => $categories, 
+        'posts' => $posts));
+
 
 });
 
 
 
+// post page, shows the post's content
 $app->get(
     '/post/:id', 
     function ($id) use ($app, $twig) {
     
-    //Get Post
-	$post = ORM::for_table('post')
+    // Get post
+    $post = ORM::for_table('post')
         ->where('id', $id)
         ->find_one();
 
+    // Get categories to show on the sidebar
+    $categories = ORM::for_table('category')
+        ->find_many();
+
     echo $twig->render('post.html', array(
-    	'current_uri' => $app->request->getResourceUri(), 
-    	'base_url' => BASE_URL, 
+        'current_uri' => $app->request->getResourceUri(), 
+        'base_url' => BASE_URL, 
         'navigation_bar_items' => Settings::$navigation_bar_items, 
-    	'post' => $post));
+        'categories' => $categories, 
+        'post' => $post));
 
-})->conditions(array('id' => '\d+'));;
+})->conditions(array('id' => '\d+'));
 
 
 
+// category page, shows the posts that belong to the category
+$app->get(
+    '/category/:id', 
+    function ($id) use ($app, $twig) {
+
+
+    // Get category
+    $selected_category = ORM::for_table('category')
+        ->where('id', $id)
+        ->find_one();
+    
+    // Get posts
+    $posts = ORM::for_table('post')
+        ->where('category_id', $id)
+        ->order_by_desc('created_at')
+        ->limit(100)
+        ->offset(0)
+        ->find_many();
+
+    // Get categories to show on the sidebar
+    $categories = ORM::for_table('category')
+        ->find_many();
+
+    echo $twig->render('category.html', array(
+        'current_uri' => $app->request->getResourceUri(), 
+        'base_url' => BASE_URL, 
+        'navigation_bar_items' => Settings::$navigation_bar_items, 
+        'selected_category' => $selected_category, 
+        'categories' => $categories, 
+        'posts' => $posts));
+
+})->conditions(array('id' => '\d+'));
+
+
+
+// about page, shows the about page (a demo static page)
 $app->get(
     '/about', 
     function () use ($app, $twig) {
+
+    // Get categories to show on the sidebar
+    $categories = ORM::for_table('category')
+        ->find_many();
     
     echo $twig->render('about.html', array(
-    	'current_uri' => $app->request->getResourceUri(), 
-    	'base_url' => BASE_URL, 
-        'navigation_bar_items' => Settings::$navigation_bar_items));
+        'current_uri' => $app->request->getResourceUri(), 
+        'base_url' => BASE_URL, 
+        'navigation_bar_items' => Settings::$navigation_bar_items, 
+        'categories' => $categories));
 
 });
 

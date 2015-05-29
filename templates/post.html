@@ -24,7 +24,12 @@
 
 
 <div class="col-xs-12 col-sm-4 secondary_column">
-<h5 class="sidebar-section-header">Do you like our content?  Follow us!</h5>
+<h5 class="sidebar-section-header">Categories:</h5>
+<ul>
+{% for category in categories %}
+<li><a href='{{ base_url }}category/{{ category.id }}'>{{ category.title }}</a></li>
+{% endfor %}
+</ul>
 </div><!--/.secondary_column-->
 
 
